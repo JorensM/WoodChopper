@@ -10,6 +10,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class WoodChopper extends JavaPlugin {
 	
+	/*
+	 * Main plugin class
+	 */
+	
 	Logger log;
 	
 	ArrayList<ChopperEntity> choppers = new ArrayList<ChopperEntity>();
@@ -25,15 +29,20 @@ public class WoodChopper extends JavaPlugin {
     	log.info("Registering event listeners");
     	getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
     	
+    	
+    	//Create Runnables
     	ChopperTask chopper_task = new ChopperTask(choppers, world);
     	ChopperRealtimeTask chopper_realtime_task = new ChopperRealtimeTask(choppers, world);
-    	
     	chopper_task.runTaskTimer(this, 0, 40);
     	chopper_realtime_task.runTaskTimer(this, 0, 10);
     	
-//    	Bukkit.getScheduler().runTaskTimer(this, new ChopperTask(choppers), 0, 1);
     }
     
+    /**
+     * Retrieve chopper by its ID
+     * @param id
+     * @return
+     */
     ChopperEntity getChopperById(String id) {
     	for(int i = 0; i < choppers.size(); i++) {
     		ChopperEntity chopper = choppers.get(i);
@@ -45,6 +54,9 @@ public class WoodChopper extends JavaPlugin {
     	throw new Error("Could not find Chopper by ID " + id);
     }
     
+    /**
+     * Spawn chopper at location with provided type
+     */
     public void spawnChopper(World world, Location location, ChopperType type) {
     	ChopperEntity chopper = new ChopperEntity(this, world, type);
 		chopper.spawn(location);

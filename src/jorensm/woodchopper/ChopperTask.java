@@ -10,6 +10,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class ChopperTask extends BukkitRunnable {
 	
+	/**
+	 * Chopper task that gets called semi-regularly
+	 */
+	
 	ArrayList<ChopperEntity> choppers;
 	World world;
 	
@@ -28,10 +32,12 @@ public class ChopperTask extends BukkitRunnable {
 			
 			boolean is_near = chopper.isNearTargetTree();
 			
+			//If the currently scanned tree has been chopped, scan for new trees and move to them
 			if(chopper.scanned_tree.size() == 0 && chopper.scanForLogs()) {
 				chopper.moveToScannedTree();
 			}
 			
+			//If chopper is near the target tree, chop it.
 			if(is_near) {
 				Bukkit.broadcastMessage("Is near tree");
 				chopper.chopScannedTree();

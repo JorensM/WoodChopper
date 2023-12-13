@@ -65,9 +65,9 @@ public class PlayerListener implements Listener {
 		Bukkit.getLogger().info("Placed block");
 		Bukkit.broadcastMessage("Placed block");
 		
+		//Check if a chopper structure has been built
 		Block block = event.getBlockPlaced();
 		Material block_type = event.getBlockPlaced().getType();
-		
 		if(block_type == Material.CHEST) {
 			Bukkit.broadcastMessage("Placed chest");
 			Block block_below = ChopperUtil.getOffsetBlock(block, new Vector(0, -1, 0), world);
@@ -85,6 +85,10 @@ public class PlayerListener implements Listener {
 		}
 	}
 	
+	/**
+	 * Handles interaction between player and choppers
+	 * @param event
+	 */
 	@EventHandler
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		Bukkit.broadcastMessage("Interacting with entity");
@@ -92,7 +96,10 @@ public class PlayerListener implements Listener {
 		Entity entity = event.getRightClicked();
 		Player player = event.getPlayer();
 		
+		//Check if entity is a chopper
 		if(entity.hasMetadata("chopper_id")) {
+			
+			//If yes, open chopper's inventory
 			Bukkit.broadcastMessage("Interacting with Chopper");
 			
 			String chopper_id = entity.getMetadata("chopper_id").get(0).asString();

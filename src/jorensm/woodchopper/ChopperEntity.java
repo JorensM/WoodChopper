@@ -30,17 +30,21 @@ public class ChopperEntity {
 	
 	String id;
 	
-	Inventory inventory;
+	Inventory inventory; // Inventory of chopper
 	
 	WoodChopper plugin;
 	
-	int cooldown = 1;
+	int cooldown = 1; // Cooldown. The higher the cooldown, the longer it will take for the chooper to gather wood
 	
-	int[] yield = {1, 1};
+	int[] yield = {1, 1}; //Range of chance of how many blocks will be gathered per chop
 	
 	int current_cooldown = 0;
 	
 	ChopperType type;
+	
+	ArrayList<Block> scanned_tree = new ArrayList<Block>(); //The blocks of the currently scanned tree
+	
+	boolean is_chopping = false;
 	
 	ChopperEntity(WoodChopper _plugin, World _world, ChopperType _type) {
 		Bukkit.broadcastMessage("Constructing Chopper");
@@ -50,6 +54,7 @@ public class ChopperEntity {
 		inventory = Bukkit.createInventory(null, 9, "Chopper Inventory");
 		world = _world;
 		
+		//Initialize properties according to specified type
 		if(type == ChopperType.EMERALD) {
 			cooldown = 2;
 		} else if (type == ChopperType.GOLD) {
@@ -58,9 +63,7 @@ public class ChopperEntity {
 		}
 	}
 	
-	ArrayList<Block> scanned_tree = new ArrayList<Block>();
 	
-	boolean is_chopping = false;
 	
 	/*
 	 * Spawn entity in the world
@@ -115,6 +118,10 @@ public class ChopperEntity {
 		return false;
 	}
 	
+	/**
+	 * Check if chopper is near their target tree
+	 * @return
+	 */
 	boolean isNearTargetTree() {
 		int radius = 4;
 		boolean is_near = false;
@@ -130,6 +137,9 @@ public class ChopperEntity {
 		return is_near;
 	}
 	
+	/**
+	 * Chop a single block from the target tree
+	 */
 	void chopScannedTree() {
 		Bukkit.broadcastMessage("Chopping scanned tree");
 		current_cooldown += 1;
@@ -150,10 +160,16 @@ public class ChopperEntity {
 		}
 	}
 	
+	/**
+	 * Move to currently scanned tree
+	 */
 	void moveToScannedTree() {
 		moveTo(scanned_tree.get(0).getLocation());
 	}
 	
+	/**
+	 * Move to specified location
+	 */
 	void moveTo(Location location) {
 		target.teleport(location);
 	}
